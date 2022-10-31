@@ -1,4 +1,5 @@
 import express from 'express';
+import CheckAuth from '../middleware/check-auth';
 
 export const graphqlRoute = express.Router();
 

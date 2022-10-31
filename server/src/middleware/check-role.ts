@@ -1,27 +1,17 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
+import HandleError from '../utils/handle-error';
 
-const CheckRole = (req: Request, res: Response, next?: (err?: any) => any): any => {
-    try{
-        const authHeader = req.headers.authorization;
-        if (!authHeader) {
-          return res.status(401).send({ status: 403, message: 'Unauthorized!' });
+const CheckRole = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = res.locals.user;
+        if (!user) {
+          return next(new HandleError(`Invalid token or session has expired`, 401));
         }
     
-        const token = authHeader.split(' ')[1];
-
-        print(token)
-    
-        // jwt.verify(token, authConfig.providers.jwt.secret, (err: any, user: any) => {
-        //   if (err) {
-        //     return res.status(403).send({ status: 403, message: 'Forbidden!' });
-        //   }
-    
-        //   req.loggedUser = user;
-        //   next();
-        // });
-    }catch(e){
-        throw new Error(`${e}`);
-    }
+        next();
+      } catch (err: any) {
+        next(err);
+      }
 }
 
 export default CheckRole;
