@@ -1,4 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config()
+
 export default {
-    accessTokenPrivateKey: 'ACCESS_TOKEN_PRIVATE_KEY',
-    accessTokenPublicKey: 'ACCESS_TOKEN_PUBLIC_KEY',
+    accessTokenPrivateKey: process.env.ACCESS_TOKEN_PRIVATE_KEY as string,
+    accessTokenPublicKey: process.env.ACCESS_TOKEN_PUBLIC_KEY as string,
+    accessTokenExpiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN as string
 };

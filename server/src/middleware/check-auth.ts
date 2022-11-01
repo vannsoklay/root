@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import HandleError from '../utils/handle-error';
 import redisClient from '../utils/connect-redis';
 import { verifyJwt } from '../utils/jwt';
+import { User } from "../models/user";
 const CheckAuth = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Get the token
@@ -34,9 +35,7 @@ const CheckAuth = async (req: Request, res: Response, next: NextFunction) => {
         }
 
         // Check if user still exist
-        // const user = await findUserById(JSON.parse(session)._id);
-        const user = [{name: "soklay"}];
-
+        const user = await User.findById({ _id: JSON.parse(session)._id });
 
         if (!user) {
             return next(new HandleError(`User with that token no longer exist`, 401));

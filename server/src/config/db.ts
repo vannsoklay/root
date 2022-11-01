@@ -13,8 +13,7 @@ export const ConneToDB = async () => {
     console.log(`Database Connected: ${connection.connection.host}`);
 
   } catch (e) {
-    // setTimeout(ConneToDB, 5000);
-    throw new Error("Try Again");
+    setTimeout(ConneToDB, 5000);
   }
 
 };
