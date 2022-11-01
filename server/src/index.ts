@@ -4,6 +4,10 @@ import { router } from "./routes/api";
 import * as bodyParser from "body-parser";
 import { ConneToDB } from './config/db';
 import cors from 'cors';
+import { execute, subscribe } from 'graphql';
+import { createServer } from 'http';
+import { schema } from './graphql/shema';
+import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 dotenv.config();
 
@@ -14,7 +18,7 @@ app.use(express.json({ limit: '10kb' }));
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'https://studio.apollographql.com'],
     credentials: true,
   })
 );
@@ -39,8 +43,16 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction): void => {
     message: err.message,
   });
 });
-
 ConneToDB()
-app.listen(port, () => {
+const server = createServer(app);
+server.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+  new SubscriptionServer({
+    execute,
+    subscribe,
+    schema
+  }, {
+    server: server,
+    path: '/subscriptions',
+  });
 });
