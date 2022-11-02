@@ -1,57 +1,22 @@
-import { GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
-import { PubSub } from 'graphql-subscriptions';
+import { GraphQLSchema } from "graphql";
+import { adminQuery } from "../controller/admin/query";
+import { clientQuery } from "../controller/client/query";
+import { adminSubscription } from "../controller/admin/subscribe";
+import { clientSubscription } from "../controller/client/subscribe";
 
-const pubsub = new PubSub();
-
-const subscription = new GraphQLObjectType({
-  name: 'Subscription',
-  fields: {
-    greeting: {
-      type: GraphQLString,
-      resolve: (source) => {
-        if (source instanceof Error) {
-          throw source;
-        }
-        return source.greeting;
-      },
-      subscribe: () => {
-        return pubsub.asyncIterator('greeting');
-      },
-    },
-  },
-});
-
-const query = new GraphQLObjectType({
-  name: 'Query',
-  fields: {
-    dummy: {
-      type: GraphQLString,
-      resolve: () => {
-        return 'dummy';
-      },
-    },
-  },
-});
-
-export const schema = new GraphQLSchema({
-  query,
-  subscription,
-});
-
-setInterval(() => {
-  pubsub.publish('greeting', {
-    greeting: 'Bonjour',
+export const schema = (prop: any) => {
+  return  new GraphQLSchema({
+    query: prop == 'admin' ? adminQuery : clientQuery,
+    subscription: prop == 'admin' ? adminSubscription : clientSubscription,
   });
-}, 1000);
+};
 
-// createServer(
-//   {
-//     schema,
-//     execute,
-//     subscribe,
-//   },
-//   {
-//     server,
-//     path: '/graphql',
-//   }
-// );
+export const adminSchema = new GraphQLSchema({
+  query: adminQuery,
+  subscription: adminSubscription
+})
+
+export const clientSchema = new GraphQLSchema({
+  query: clientQuery,
+  subscription: clientSubscription
+})

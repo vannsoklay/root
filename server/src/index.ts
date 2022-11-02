@@ -6,7 +6,7 @@ import { ConneToDB } from './config/db';
 import cors from 'cors';
 import { execute, subscribe } from 'graphql';
 import { createServer } from 'http';
-import { schema } from './graphql/shema';
+import { clientSchema } from './graphql/shema';
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 
 dotenv.config();
@@ -43,6 +43,8 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction): void => {
     message: err.message,
   });
 });
+
+
 ConneToDB()
 const server = createServer(app);
 server.listen(port, () => {
@@ -50,7 +52,13 @@ server.listen(port, () => {
   new SubscriptionServer({
     execute,
     subscribe,
-    schema
+    schema: clientSchema,
+    onConnect: (connectionParams: any, webSocket: any): void => {
+      if(connectionParams.Authorization){
+        return
+      }
+      throw new Error("Missing with token");
+    }
   }, {
     server: server,
     path: '/subscriptions',
