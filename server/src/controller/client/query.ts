@@ -1,6 +1,6 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql';
 
-export const clientQuery: any = new GraphQLObjectType({
+export const clientQuery = new GraphQLObjectType({
     name: 'Query',
     fields: {
         client: {

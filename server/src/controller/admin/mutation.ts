@@ -1,20 +1,18 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql';
-import { PubSub } from 'graphql-subscriptions';
-const pubsub = new PubSub();
 
-export const adminMutation: any = new GraphQLObjectType({
+export const adminMutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        greeting: {
+        message: {
             type: GraphQLString,
-            resolve: (source) => {
-                if (source instanceof Error) {
-                    throw source;
-                }
-                return source.greeting;
-            },
-            subscribe: () => {
-                return pubsub.asyncIterator('greeting');
+            resolve: (parent, args, { pubsub }) => {
+                let message = "hello world"
+                console.log(pubsub);
+                
+                pubsub.publish('message', {
+                    message: message,
+                })
+                return message;
             },
         },
     },

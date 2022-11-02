@@ -7,7 +7,9 @@ import cors from 'cors';
 import { execute, subscribe } from 'graphql';
 import { createServer } from 'http';
 import { clientSchema } from './graphql/shema';
-import { SubscriptionServer } from 'subscriptions-transport-ws'
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { PubSub } from 'graphql-subscriptions';
+const pubsub = new PubSub();
 
 dotenv.config();
 

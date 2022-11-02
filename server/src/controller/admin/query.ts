@@ -1,6 +1,6 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql';
 
-export const adminQuery: any = new GraphQLObjectType({
+export const adminQuery = new GraphQLObjectType({
     name: 'Query',
     fields: {
         dummy: {
