@@ -1,0 +1,48 @@
+version: '3.9'
+services:
+  server: 
+    build: 
+      context: ./server
+      args: 
+        NODE_ENV: development
+    ports: 
+      - 8000
+    restart: on-failure
+    env_file:
+      - ./server/.env
+    environment: 
+      - NODE_ENV=development
+      - MONGO_USER=root
+      - MONGO_PASSWORD=123
+    depends_on:
+      - mongo_db
+      - redis_cli
+  mongo_db:
+    container_name: mongo_db
+    image: mongo:latest
+    ports:
+      - '9002:27017'
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123
+      - MONG_USER=mydb
+    volumes:
+      - mongo_db:/data/db
+  redis_cli:
+    image: redis:alpine
+    container_name: redis_cli
+    restart: unless-stopped
+    ports:
+      - '9001:6379'
+    volumes:
+      - redis_cli:/data
+  nginx:
+    build: ./nginx
+    ports:
+    - '80:80'
+    depends_on:
+    - server
+volumes:
+  mongo_db:
+  redis_cli:
+  nginx:

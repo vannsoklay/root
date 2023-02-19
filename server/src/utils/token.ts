@@ -3,6 +3,7 @@ import { signJwt } from './jwt';
 import redisClient from './connect-redis';
 
 export const signToken = async (user: any) => {
+  
   // Sign the access token
   const access_token = signJwt(
     { sub: user._id },

@@ -7,7 +7,7 @@ const requireUser = async (_req: Request, res: Response, next: NextFunction) => 
         if (!user) {
           return next(new HandleError(`Invalid token or session has expired`, 401));
         }
-    
+        
         next();
       } catch (err: any) {
         next(err);

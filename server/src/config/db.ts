@@ -10,6 +10,7 @@ export const ConneToDB = async () => {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     } as ConnectOptions);
+
     console.log(`Database Connected: ${connection.connection.host}`);
 
   } catch (e) {

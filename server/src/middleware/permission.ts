@@ -3,7 +3,7 @@ import HandleError from '../utils/handle-error';
 
 export const Permission =
   (...allowedRoles: string[]) =>
-  (req: Request, res: Response, next: NextFunction) => {
+  (_req: Request, res: Response, next: NextFunction) => {
     const user = res.locals.user;
     if (!allowedRoles.includes(user.role)) {
       return next(
