@@ -1,6 +1,3 @@
-
- 
-
 on:
   push:
     # paths:
@@ -12,20 +9,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps: 
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with: 
-          node-version: 16
-      - run: npm ci
-      - run: npm run build
-      - name: deploy to production
-        uses: appleboy/ssh-action@v0.1.9
-        with: 
-          host: ${{ secrets.PRODUCTION_HOST }}
-          username: ${{ secrets.PRODUCTION_USERNAME }}
-          password: ${{ secrets.PRODUCTION_PASSWORD }}
-          script: |
-            cd /var/www/apps/root/client
-            git pull origin master
-            npm install && npm run build
-            pm2 reload all
+      - name: Run SSHPASS
+        run: |
+          sshpass \
+            -p ${{ secrets.PRODUCTION_PASSWORD }} \
+            ssh \
+              -o 'StrictHostKeyChecking no' \
+              -p ${{ secrets.SSH_PORT }} ${{ secrets.PRODUCTION_USERNAME }}@${{ secrets.PRODUCTION_HOST }} \
+              'cd /var/www/apps/root/client && git checkout master && git pull --force && npm i --force && npm run build && pm2 reload all'
