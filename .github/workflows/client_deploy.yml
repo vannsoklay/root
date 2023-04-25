@@ -3,8 +3,8 @@
 
 on:
   push:
-    paths:
-      - root/client/**
+    # paths:
+    #   - root/client/**
     branches:
       - master
 
