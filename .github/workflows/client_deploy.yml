@@ -15,5 +15,5 @@ jobs:
             -p ${{ secrets.PRODUCTION_PASSWORD }} \
             ssh \
               -o 'StrictHostKeyChecking no' \
-              -p ${{ secrets.SSH_PORT }} ${{ secrets.PRODUCTION_USERNAME }}@${{ secrets.PRODUCTION_HOST }} \
+              -p ${{ secrets.PRODUCTION_USERNAME }}@${{ secrets.PRODUCTION_HOST }} \
               'cd /var/www/apps/root/client && git checkout master && git pull --force && npm i --force && npm run build && pm2 reload all'
