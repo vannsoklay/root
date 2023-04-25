@@ -1,4 +1,4 @@
-import config from '../config/custom-env';
+import config from '../config';
 import { signJwt } from './jwt';
 import redisClient from './connect-redis';
 

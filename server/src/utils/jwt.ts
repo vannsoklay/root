@@ -1,5 +1,5 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
-import config from '../config/custom-env';
+import config from '../config';
 
 export const signJwt = (payload: Object, options: SignOptions = {}) => {
   const privateKey = Buffer.from(

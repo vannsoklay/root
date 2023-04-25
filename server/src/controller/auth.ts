@@ -2,7 +2,7 @@ import { Response, Request, NextFunction, CookieOptions } from "express"
 import { User, CreateUserInput, LoginUserInput, hashedPassword, comparePasswords } from "../models/user";
 import HandleError from "../utils/handle-error";
 import { signToken } from "../utils/token";
-import config from '../config/custom-env';
+import config from '../config';
 
 const accessTokenCookieOptions: CookieOptions = {
     expires: new Date(

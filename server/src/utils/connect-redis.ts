@@ -1,5 +1,5 @@
 import { createClient } from 'redis';
-import config from "../config/custom-env";
+import config from "../config";
 
 const redisUrl = `redis://${config.hostRedis}`;
 const redisClient = createClient({
