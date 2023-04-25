@@ -1,19 +1,24 @@
+
+ 
+
 on:
   push:
     # paths:
     #   - root/client/**
     branches:
       - master
-
 jobs: 
   build-and-deploy:
     runs-on: ubuntu-latest
-    steps: 
-      - name: Run SSHPASS
-        run: |
-          sshpass \
-            -p ${{ secrets.PRODUCTION_PASSWORD }} \
-            ssh \
-              -o 'StrictHostKeyChecking no' \
-              -p ${{ secrets.PRODUCTION_USERNAME }}@${{ secrets.PRODUCTION_HOST }} \
-              'cd /var/www/apps/root/client && git checkout master && git pull --force && npm i --force && npm run build && pm2 reload all'
+    steps:
+      - name: deploy to production
+        uses: appleboy/ssh-action@v0.1.9
+        with: 
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USERNAME }}
+          password: ${{ secrets.PRODUCTION_PASSWORD }}
+          script: |
+            cd /var/www/apps/root/client
+            git pull origin master
+            npm install --force && npm run build
+            pm2 reload all
